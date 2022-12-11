@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from debug.Debug import Debug
+from fbref.TournamentStats import TournamentStats
 
 
 # this method will get the team stats from the game, to get extra stats, call get_team_stats_extra()
@@ -100,7 +101,7 @@ def team_stats_to_csv(file_path):
     team1, team2 = get_team_stats()  # get the teams dictionaries with the relevant data
     f = open(file_path, 'a', encoding='utf-8')  # open file with append
     f.write('match stats\n')  # table headline
-    headline = team1.keys()   # dictionary key set contains the table features
+    headline = team1.keys()  # dictionary key set contains the table features
     headline = ','.join(headline)  # concat the features with , to get csv
     team1_stats = team1.values()  # get values of team1
     team1_stats = ','.join(team1_stats)  # concat the values with , for csv
@@ -183,6 +184,18 @@ def entire_match_report_to_csv():
     f.close()  # close the file
 
 
+def entire_season():
+    links_list = []
+    # Find all elements with the tag "a" and the text "Match Report"
+    elements = driver.find_elements(By.XPATH, "//a[text()='Match Report']")
+    for element in elements:
+        links_list.append(element.get_attribute("href"))  # collect all the match_report links to list
+
+    for link in links_list:
+        driver.get(link)  # get the current match report link
+        entire_match_report_to_csv()  # save the match report to csv
+
+
 KFIR_WINDOWS_PATH = 'C:\kfir\Projects\chrome_webdriver\chromedriver.exe'
 KFIR_UBUNTU_PATH = '/usr/bin/chromedriver'
 driver = webdriver.Chrome(KFIR_UBUNTU_PATH)
@@ -191,6 +204,5 @@ driver.implicitly_wait(2)
 # elements = driver.find_elements(By.XPATH, '//*[contains(@id, "switcher_player_stats_")]')
 # for element in elements:
 #     print(element.text)
-print('starting function')
 entire_match_report_to_csv()
 driver.close()
