@@ -18,7 +18,7 @@ def get_team_stats():
     team1['name'] = data[1].split(' ')[0]
     team2['name'] = data[1].split(' ')[1]
 
-    team1['possessiom'] = data[3]
+    team1['possession'] = data[3]
     team2['possession'] = data[4]
 
     team1['successful passes'] = data[6].split(' ')[0]
@@ -45,8 +45,11 @@ def get_team_stats():
 
     # yellow cards parameter are not textual, pulling the yellow cards elements array to calc the number
     cards_elements = driver.find_elements(By.CLASS_NAME, 'cards')
-    team1['yellow cards'] = len(cards_elements[0].find_elements(By.CLASS_NAME, 'yellow_card'))
-    team2['yellow cards'] = len(cards_elements[1].find_elements(By.CLASS_NAME, 'yellow_card'))
+    team1['yellow cards'] = str(len(cards_elements[0].find_elements(By.CLASS_NAME, 'yellow_card')))
+    team2['yellow cards'] = str(len(cards_elements[1].find_elements(By.CLASS_NAME, 'yellow_card')))
+
+    get_team_stats_extra(team1, team2)
+    return team1, team2
 
 
 # this method add more data to the dicts from get_team_stats() method
@@ -54,6 +57,9 @@ def get_team_stats():
 def get_team_stats_extra(team1, team2):
     element = driver.find_element(By.ID, 'team_stats_extra')
     data = element.text.split('\n')
+
+    Debug.log(len(data))
+    Debug.log(data)
 
     team1['fouls'] = data[2]
     team2['fouls'] = data[4]
@@ -67,29 +73,51 @@ def get_team_stats_extra(team1, team2):
     team1['touches'] = data[11]
     team2['touches'] = data[13]
 
-    team1['tackles'] = data[16]
-    team2['tackles'] = data[18]
+    team1['tackles'] = data[14]
+    team2['tackles'] = data[16]
 
-    team1['interceptions'] = data[19]
-    team2['interceptions'] = data[21]
+    team1['interceptions'] = data[17]
+    team2['interceptions'] = data[19]
 
-    team1['aerials won'] = data[22]
-    team2['aerials won'] = data[24]
+    team1['aerials won'] = data[20]
+    team2['aerials won'] = data[22]
 
-    team1['clearances'] = data[25]
-    team2['clearances'] = data[27]
+    team1['clearances'] = data[23]
+    team2['clearances'] = data[25]
 
-    team1['offsides'] = data[30]
-    team2['offsides'] = data[32]
+    team1['offsides'] = data[26]
+    team2['offsides'] = data[28]
 
-    team1['goal kicks'] = data[33]
-    team2['goal kicks'] = data[35]
+    team1['goal kicks'] = data[29]
+    team2['goal kicks'] = data[31]
 
-    team1['throw ins'] = data[36]
-    team2['throw ins'] = data[38]
+    team1['throw ins'] = data[32]
+    team2['throw ins'] = data[34]
 
-    team1['long balls'] = data[39]
-    team2['long balls'] = data[41]
+    team1['long balls'] = data[35]
+    team2['long balls'] = data[37]
+
+
+def team_stats_to_csv(file_path):
+    print('calling get team stats')
+    team1, team2 = get_team_stats()
+    print(team1)
+    print(team2)
+    f = open(file_path, 'a', encoding='utf-8')
+    f.write('match stats\n')
+    headline = team1.keys()
+    headline = ','.join(headline)
+    print(headline)
+    team1_stats = list(team1.values())
+    print(team1_stats)
+    team1_stats = ','.join(team1_stats)
+    print(team1_stats)
+    team2_stats = team2.values()
+    team2_stats = ','.join(team2_stats)
+    print(team2_stats)
+    f.write(f'{headline}\n')
+    f.write(f'{team1_stats}\n')
+    f.write(f'{team2_stats}\n')
 
 
 # this method pulls the teams players stats and add the data in list for each team
@@ -108,7 +136,7 @@ def get_match_players_stats():
 
 
 # this method pulls the teams players stats and writes the data in a csv file
-def player_stats_to_csv():
+def player_stats_to_csv(file_path):
     # pull the elements that represents the players stats tables
     elements = driver.find_elements(By.XPATH, '//*[contains(@id, "switcher_player_stats_")]')
     data1 = elements[0].text.split('\n')  # team1 data
@@ -119,9 +147,9 @@ def player_stats_to_csv():
     data1 = data1[2:len(data1)]
     data2 = data2[2:len(data2)]
 
-    f = open('player_stats.csv', 'w', encoding='utf-8')  # open csv file for writing
-    f.write('team1\n')  # table1 headline
-    f.write(f'{table_headline}\n') # write table parameters
+    f = open(file_path, 'a', encoding='utf-8')  # open csv file for writing
+    f.write('\nteam1\n')  # table1 headline
+    f.write(f'{table_headline}\n')  # write table parameters
     # find the player name (could be more than 1 word and we split by blanks
     for row in data1:
         index = 0
@@ -153,17 +181,22 @@ def player_stats_to_csv():
         f.write(f'{name},{row_csv}\n')
 
 
-# elements = driver.find_elements(By.CLASS_NAME, 'hasmore')
-# for element in elements:
-#     driver.execute_script("arguments[0].setAttribute('class', 'hasmore drophover')", element)
-#
-#     elements = driver.find_elements(By.XPATH, '//*[contains(@id, "switcher_player_stats_")]')
+def entire_match_report_to_csv():
+    file_name = 'match_report.csv'
+    f = open(file_name, 'w', encoding='utf-8')
+    team_stats_to_csv(file_name)
+    player_stats_to_csv(file_name)
+    f.close()
 
-PATH = 'C:\kfir\Projects\chrome_webdriver\chromedriver.exe'
-driver = webdriver.Chrome(PATH)
+
+KFIR_WINDOWS_PATH = 'C:\kfir\Projects\chrome_webdriver\chromedriver.exe'
+KFIR_UBUNTU_PATH = '/usr/bin/chromedriver'
+driver = webdriver.Chrome(KFIR_UBUNTU_PATH)
 driver.get('https://fbref.com/en/matches/15996455/Dortmund-Barcelona-September-17-2019-Champions-League')
 driver.implicitly_wait(2)
 # elements = driver.find_elements(By.XPATH, '//*[contains(@id, "switcher_player_stats_")]')
 # for element in elements:
 #     print(element.text)
-player_stats_to_csv()
+print('starting function')
+entire_match_report_to_csv()
+driver.close()
