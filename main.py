@@ -58,9 +58,6 @@ def get_team_stats_extra(team1, team2):
     element = driver.find_element(By.ID, 'team_stats_extra')
     data = element.text.split('\n')
 
-    Debug.log(len(data))
-    Debug.log(data)
-
     team1['fouls'] = data[2]
     team2['fouls'] = data[4]
 
@@ -98,23 +95,19 @@ def get_team_stats_extra(team1, team2):
     team2['long balls'] = data[37]
 
 
+# this method pulls the team stats data and writes it to csv
 def team_stats_to_csv(file_path):
-    print('calling get team stats')
-    team1, team2 = get_team_stats()
-    print(team1)
-    print(team2)
-    f = open(file_path, 'a', encoding='utf-8')
-    f.write('match stats\n')
-    headline = team1.keys()
-    headline = ','.join(headline)
-    print(headline)
-    team1_stats = list(team1.values())
-    print(team1_stats)
-    team1_stats = ','.join(team1_stats)
-    print(team1_stats)
+    team1, team2 = get_team_stats()  # get the teams dictionaries with the relevant data
+    f = open(file_path, 'a', encoding='utf-8')  # open file with append
+    f.write('match stats\n')  # table headline
+    headline = team1.keys()   # dictionary key set contains the table features
+    headline = ','.join(headline)  # concat the features with , to get csv
+    team1_stats = team1.values()  # get values of team1
+    team1_stats = ','.join(team1_stats)  # concat the values with , for csv
+    # same for team2
     team2_stats = team2.values()
     team2_stats = ','.join(team2_stats)
-    print(team2_stats)
+    # write the data to the csv file
     f.write(f'{headline}\n')
     f.write(f'{team1_stats}\n')
     f.write(f'{team2_stats}\n')
@@ -181,12 +174,13 @@ def player_stats_to_csv(file_path):
         f.write(f'{name},{row_csv}\n')
 
 
+# this method using team_stats_to_csv() and player_stats_to_csv() to write a full match report to csv
 def entire_match_report_to_csv():
-    file_name = 'match_report.csv'
+    file_name = 'match_report.csv'  # open the file for writing
     f = open(file_name, 'w', encoding='utf-8')
-    team_stats_to_csv(file_name)
-    player_stats_to_csv(file_name)
-    f.close()
+    team_stats_to_csv(file_name)  # call the method with the file path
+    player_stats_to_csv(file_name)  # call the method with te file path
+    f.close()  # close the file
 
 
 KFIR_WINDOWS_PATH = 'C:\kfir\Projects\chrome_webdriver\chromedriver.exe'
