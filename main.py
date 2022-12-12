@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from debug.Debug import Debug
 from fbref.TournamentStats import TournamentStats
+import numpy as np
 
 
 # this method will get the team stats from the game, to get extra stats, call get_team_stats_extra()
@@ -196,13 +197,18 @@ def entire_season():
         entire_match_report_to_csv()  # save the match report to csv
 
 
+ARSENAL_VS_PALACE = 'https://fbref.com/en/matches/e62f6e78/Crystal-Palace-Arsenal-August-5-2022-Premier-League'
+BARCELONA_VS_DORTMUND = 'https://fbref.com/en/matches/15996455/Dortmund-Barcelona-September-17-2019-Champions-League'
+
 KFIR_WINDOWS_PATH = 'C:\kfir\Projects\chrome_webdriver\chromedriver.exe'
 KFIR_UBUNTU_PATH = '/usr/bin/chromedriver'
-driver = webdriver.Chrome(KFIR_UBUNTU_PATH)
-driver.get('https://fbref.com/en/matches/15996455/Dortmund-Barcelona-September-17-2019-Champions-League')
+driver = webdriver.Chrome(KFIR_WINDOWS_PATH)
+driver.get(ARSENAL_VS_PALACE)
 driver.implicitly_wait(2)
-# elements = driver.find_elements(By.XPATH, '//*[contains(@id, "switcher_player_stats_")]')
+# elements = driver.find_elements(By.XPATH, '//*[contains(@id, "switcher_player_stats_")]')d
 # for element in elements:
 #     print(element.text)
-entire_match_report_to_csv()
+#entire_match_report_to_csv()
+TournamentStats.entire_match_report_to_csv(driver)
 driver.close()
+

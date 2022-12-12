@@ -6,43 +6,61 @@ from selenium.webdriver.common.by import By
 def get_team_stats_extra(driver, team1, team2):
     element = driver.find_element(By.ID, 'team_stats_extra')
     data = element.text.split('\n')
-    print(element.text)
 
-    team1['fouls'] = data[2]
-    team2['fouls'] = data[4]
+    # remove white spaces from left and right
+    for i in range(len(data)):
+        data[i] = data[i].lstrip()  # remove white spaces from left
+        data[i] = data[i].rstrip()  # remove white spaces from right
 
-    team1['corners'] = data[5]
-    team2['corners'] = data[7]
+    team1['name'] = data[0]
+    team2['name'] = data[1]
 
-    team1['crosses'] = data[8]
-    team2['crosses'] = data[10]
+    # the names of the teams appears more than once, removing them as long as they're in the list
+    # when the elements won't be at the list anymore, exception will be thrown (remove method remove only one element)
+    try:
+        while True:
+            data.remove(team1['name'])
+            data.remove(team2['name'])
+    except:
+        pass
 
-    team1['touches'] = data[11]
-    team2['touches'] = data[13]
+    print(data)
 
-    team1['tackles'] = data[14]
-    team2['tackles'] = data[16]
+    team1['fouls'] = data[0]
+    team2['fouls'] = data[2]
 
-    team1['interceptions'] = data[17]
-    team2['interceptions'] = data[19]
+    team1['corners'] = data[3]
+    team2['corners'] = data[5]
 
-    team1['aerials won'] = data[20]
-    team2['aerials won'] = data[22]
+    team1['crosses'] = data[6]
+    team2['crosses'] = data[8]
 
-    team1['clearances'] = data[23]
-    team2['clearances'] = data[25]
+    team1['touches'] = data[9]
+    team2['touches'] = data[11]
 
-    team1['offsides'] = data[26]
-    team2['offsides'] = data[28]
+    team1['tackles'] = data[12]
+    team2['tackles'] = data[14]
 
-    team1['goal kicks'] = data[29]
-    team2['goal kicks'] = data[31]
+    team1['interceptions'] = data[15]
+    team2['interceptions'] = data[17]
 
-    team1['throw ins'] = data[32]
-    team2['throw ins'] = data[34]
+    team1['aerials won'] = data[18]
+    team2['aerials won'] = data[20]
 
-    team1['long balls'] = data[35]
-    team2['long balls'] = data[37]
+    team1['clearances'] = data[21]
+    team2['clearances'] = data[23]
+
+    team1['offsides'] = data[24]
+    team2['offsides'] = data[26]
+
+    team1['goal kicks'] = data[27]
+    team2['goal kicks'] = data[29]
+
+    team1['throw ins'] = data[30]
+    team2['throw ins'] = data[32]
+
+    team1['long balls'] = data[33]
+    team2['long balls'] = data[35]
 
 
 class TeamStats:
@@ -56,8 +74,8 @@ class TeamStats:
         team2 = {}  # init dict for team2
 
         # split the row data and put at the right keys for each team
-        team1['name'] = data[1].split(' ')[0]
-        team2['name'] = data[1].split(' ')[1]
+        # team1['name'] = data[1].split(' ')[0]
+        # team2['name'] = data[1].split(' ')[1]
 
         team1['possession'] = data[3]
         team2['possession'] = data[4]
