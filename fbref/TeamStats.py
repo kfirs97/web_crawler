@@ -1,6 +1,19 @@
 from selenium.webdriver.common.by import By
 
 
+def get_head_to_head(driver):
+    element = driver.find_element(By.CLASS_NAME, 'scorebox')
+    data = element.text.split('\n')
+    team1 = {'name': data[0], 'wins': data[1].split(' ')[0], 'draws': data[2].split(' ')[0],
+             'losses': data[3].split(' ')[0], 'goals': data[4].split(' ')[0]}
+
+    team2 = {'name': data[5], 'wins': data[6].split(' ')[0], 'draws': data[7].split(' ')[0],
+             'losses': data[8].split(' ')[0], 'goals': data[9].split(' ')[0]}
+
+    print(team1)
+    print(team2)
+
+
 # this method add more data to the dicts from get_team_stats() method
 # call this method from get_team_stats() method to expand the data about the teams in the dicts
 def get_team_stats_extra(driver, team1, team2):
@@ -70,37 +83,18 @@ class TeamStats:
     def get_team_stats(driver):
         element = driver.find_element(By.ID, 'team_stats')
         data = element.text.split('\n')
-        team1 = {}  # init dict for team1
-        team2 = {}  # init dict for team2
+        # init dict for teams
+        team1 = {'possession': data[3], 'successful passes': data[6].split(' ')[0],
+                 'total pass attempts': data[6].split(' ')[2], 'pass accuracy': data[6].split(' ')[-1],
+                 'shots on target': data[9].split(' ')[0], 'shots': data[9].split(' ')[2],
+                 'shots accuracy': data[9].split(' ')[-1], 'shots on goal': data[12].split(' ')[2],
+                 'saves': data[12].split(' ')[0]}
 
-        # split the row data and put at the right keys for each team
-        # team1['name'] = data[1].split(' ')[0]
-        # team2['name'] = data[1].split(' ')[1]
-
-        team1['possession'] = data[3]
-        team2['possession'] = data[4]
-
-        team1['successful passes'] = data[6].split(' ')[0]
-        team1['total pass attempts'] = data[6].split(' ')[2]
-        team1['pass accuracy'] = data[6].split(' ')[-1]
-
-        team2['successful passes'] = data[7].split(' ')[2]
-        team2['total pass attempts'] = data[7].split(' ')[-1]
-        team2['pass accuracy'] = data[7].split(' ')[0]
-
-        team1['shots on target'] = data[9].split(' ')[0]
-        team1['shots'] = data[9].split(' ')[2]
-        team1['shots accuracy'] = data[9].split(' ')[-1]
-
-        team2['shots on target'] = data[10].split(' ')[2]
-        team2['shots'] = data[10].split(' ')[-1]
-        team2['shots accuracy'] = data[10].split(' ')[0]
-
-        team1['shots on goal'] = data[12].split(' ')[2]
-        team1['saves'] = data[12].split(' ')[0]
-
-        team2['shots on goal'] = data[13].split(' ')[-1]
-        team2['saves'] = data[13].split(' ')[2]
+        team2 = {'possession': data[4], 'successful passes': data[7].split(' ')[2],
+                 'total pass attempts': data[7].split(' ')[-1], 'pass accuracy': data[7].split(' ')[0],
+                 'shots on target': data[10].split(' ')[2], 'shots': data[10].split(' ')[-1],
+                 'shots accuracy': data[10].split(' ')[0], 'shots on goal': data[13].split(' ')[-1],
+                 'saves': data[13].split(' ')[2]}  # init dict for team2
 
         # yellow cards parameter are not textual, pulling the yellow cards elements array to calc the number
         cards_elements = driver.find_elements(By.CLASS_NAME, 'cards')

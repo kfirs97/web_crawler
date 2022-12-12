@@ -198,17 +198,17 @@ def entire_season():
 
 
 ARSENAL_VS_PALACE = 'https://fbref.com/en/matches/e62f6e78/Crystal-Palace-Arsenal-August-5-2022-Premier-League'
+HEAD_TO_HEAD = 'https://fbref.com/en/stathead/matchup/teams/47c64c55/18bb7c10/Crystal-Palace-vs-Arsenal-History#coverage'
 BARCELONA_VS_DORTMUND = 'https://fbref.com/en/matches/15996455/Dortmund-Barcelona-September-17-2019-Champions-League'
 
 KFIR_WINDOWS_PATH = 'C:\kfir\Projects\chrome_webdriver\chromedriver.exe'
 KFIR_UBUNTU_PATH = '/usr/bin/chromedriver'
 driver = webdriver.Chrome(KFIR_WINDOWS_PATH)
-driver.get(ARSENAL_VS_PALACE)
+driver.get(HEAD_TO_HEAD)
 driver.implicitly_wait(2)
-# elements = driver.find_elements(By.XPATH, '//*[contains(@id, "switcher_player_stats_")]')d
-# for element in elements:
-#     print(element.text)
-#entire_match_report_to_csv()
-TournamentStats.entire_match_report_to_csv(driver)
-driver.close()
 
+# added get_head_to_head() and get_match_info functions
+
+
+
+driver.close()

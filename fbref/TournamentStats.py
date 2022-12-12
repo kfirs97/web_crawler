@@ -3,6 +3,13 @@ from fbref.TeamStats import TeamStats
 from fbref.PlayerStats import PlayerStats
 
 
+def get_match_info(driver):
+    element = driver.find_element(By.CLASS_NAME, 'scorebox')
+    data = element.text.split('\n')
+    match_info = {'date': data[14].split('(')[0].rstrip(), 'attendance': data[18].split(': ')[1],
+                  'Venue': data[19].split(': ')[1].replace(',', '')}
+    return match_info
+
 class TournamentStats:
     @staticmethod
     # this method using team_stats_to_csv() and player_stats_to_csv() to write a full match report to csv
