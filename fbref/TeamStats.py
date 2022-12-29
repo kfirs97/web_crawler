@@ -121,3 +121,21 @@ class TeamStats:
         f.write(f'{headline}\n')
         f.write(f'{team1_stats}\n')
         f.write(f'{team2_stats}\n')
+
+    @staticmethod
+    def get_head_to_head_last5(driver):
+        element = driver.find_element(By.ID, 'games_history_all')  # find game history table
+        match_count = 0  # count the games, we need only 5 of them
+        match_reports = []
+        rows = element.find_elements(By.TAG_NAME, 'tr')  # get the table's rows
+        for row in rows:
+            tds = row.find_elements(By.CLASS_NAME, 'left')  # get the columns that may be the match report column
+            for td in tds:
+                if td.get_attribute('data-stat') == 'match_report':  # make sure we're at the right column
+                    a_tag = td.find_elements(By.TAG_NAME, 'a')  # get the 'a' tag from the column tag
+                    if len(a_tag) == 1:  # make sure there is a match report (sometimes there are future games in table)
+                        match_reports.append(a_tag.__getitem__(0).get_attribute('href'))  # insert the link to the list
+                        match_count += 1  # update the match count
+                        # finish after 5 matches
+                        if match_count == 5:
+                            return match_reports

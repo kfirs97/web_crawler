@@ -197,18 +197,46 @@ def entire_season():
         entire_match_report_to_csv()  # save the match report to csv
 
 
+def get_head_to_head_last5():
+    element = driver.find_element(By.ID, 'games_history_all')  # find game history table
+    match_count = 0  # count the games, we need only 5 of them
+    match_reports = []
+    rows = element.find_elements(By.TAG_NAME, 'tr')  # get the table's rows
+    for row in rows:
+        tds = row.find_elements(By.CLASS_NAME, 'left')  # get the cloumns that may be the match report column
+        for td in tds:
+            if td.get_attribute('data-stat') == 'match_report':  # make sure we're at the right column
+                a_tag = td.find_elements(By.TAG_NAME, 'a')  # get the 'a' tag from the column tag
+                if len(a_tag) == 1:  # make sure there is a match report (sometimes there are future games in table)
+                    match_reports.append(a_tag.__getitem__(0).get_attribute('href'))  # insert the link to the list
+                    match_count += 1  # update the match count
+                    # finish after 5 matches
+                    if match_count == 5:
+                        return match_reports
+
+
 ARSENAL_VS_PALACE = 'https://fbref.com/en/matches/e62f6e78/Crystal-Palace-Arsenal-August-5-2022-Premier-League'
 HEAD_TO_HEAD = 'https://fbref.com/en/stathead/matchup/teams/47c64c55/18bb7c10/Crystal-Palace-vs-Arsenal-History#coverage'
 BARCELONA_VS_DORTMUND = 'https://fbref.com/en/matches/15996455/Dortmund-Barcelona-September-17-2019-Champions-League'
 
 KFIR_WINDOWS_PATH = 'C:\kfir\Projects\chrome_webdriver\chromedriver.exe'
 KFIR_UBUNTU_PATH = '/usr/bin/chromedriver'
-driver = webdriver.Chrome(KFIR_WINDOWS_PATH)
+driver = webdriver.Chrome(KFIR_UBUNTU_PATH)
 driver.get(HEAD_TO_HEAD)
 driver.implicitly_wait(2)
+match_reports = get_head_to_head_last5()
+print(match_reports)
+
+# elements = driver.find_elements(By.TAG_NAME, 'tr')
+# print(len(elements))
+# rows = [f'{i}' for i in range(2, 7)]
+# print(rows)
+# for element in elements:
+#     if element.get_attribute('data-row') in rows:
+#         print(element.text)
+
 
 # added get_head_to_head() and get_match_info functions
-
 
 
 driver.close()
