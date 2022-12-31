@@ -7,25 +7,25 @@ In any site package we have 3 diffrernt modules, PlayerStats, TeamStats, Tournam
 ## PlayerStats
 In each match report at fbref there's also a table for the teams players stats from the game, this module will pull this data 
 ### Functoins
-- get_match_player stats() 
+- get_match_player stats() \
   Get the player stats table data and store it in a python list
-- player_stats_to_csv(file_path)
+- player_stats_to_csv(file_path) \
   Pull the player stats table data and store in in a csv file at the given file path
 
-* When calling this function, make sure your driver is in a match report page
+*** When calling this functions, make sure your driver is in a match report page
 
 ## TeamStats
 This module will retreive from the site data about the teams
 ### Functions
 #### match report functions
-- get_team_stats()
+- get_team_stats() \
   Pulls the team stats from the match report page and store it in a dictionary for each team when the key is the name of attribute
-- get_team_stats_extra()
+- get_team_stats_extra() \
   Helper function for get_team_stats() function, pulls deeper data from the match report, get_team_stats() will use this method to get all of the teams data from the       match report
-- team_stats_to_csv(file_path)
+- team_stats_to_csv(file_path) \
   pulls the team stats data and store it in a csv file at the given file path
 
-* When calling this function, make sure your driver is in a match report page
+*** When calling this functions, make sure your driver is in a match report page
 
 #### head to head functions
 - get_head_to_head()
