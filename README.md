@@ -11,5 +11,6 @@ In each match report at fbref there's also a table for the teams players stats, 
   get the player stats table data and store it in a python list
 - player_stats_to_csv(file_path)
   pull the player stats table data and store in in a csv file at the given file path
+
 *when calling this function, make sure your driver is in a match report page
 
