@@ -33,7 +33,7 @@ This module will retreive from the site data about the teams
 - get_head_to_head_last5() \
   Provide a list with links for the match reports of the last match ups between the teams
   
-* When calling this function, make sure your driver is in a head to head page
+*** When calling this function, make sure your driver is in a head to head page
 
 ## TournamentStats
 This module will pull relevant data about the tournament that both teams competing at
