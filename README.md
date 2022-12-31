@@ -28,9 +28,9 @@ This module will retreive from the site data about the teams
 *** When calling this functions, make sure your driver is in a match report page
 
 #### head to head functions
-- get_head_to_head()
+- get_head_to_head() \
   Get general data about the last head to head games between the 2 teams (wins, loses, golas, etc) and store it in a dictionary for each team when the key is the         attribute name
-- get_head_to_head_last5()
+- get_head_to_head_last5() \
   Provide a list with links for the match reports of the last match ups between the teams
   
 * When calling this function, make sure your driver is in a head to head page
@@ -38,11 +38,12 @@ This module will retreive from the site data about the teams
 ## TournamentStats
 This module will pull relevant data about the tournament that both teams competing at
 ### Functions
-- get_match_info()
+- get_match_info() \
   Retreive general info about the game settings (date, attendence, venue, etc)
-- entire_match-report_to_csv()
+- entire_match-report_to_csv() \
   Get the whole match report data and store it in a csv file that will contain 3 tables, a table with the teams stats and two more tables for each team's players stats
-- entire_season_to_csv()
-  Get the whole season/tournament games match reports and store them in a csv file for each match report in a given folder path
+- entire_season_to_csv() \
+  Get the whole season/tournament games match reports and store them in a csv file for each match report in a given folder path. \
+  When calling this function, make sure your driver is in a scores & fixtures page of the relevant tournament
 
   
