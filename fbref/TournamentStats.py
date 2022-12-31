@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
-from fbref.TeamStats import TeamStats
-from fbref.PlayerStats import PlayerStats
+import fbref.TeamStats as TeamStats
+import fbref.PlayerStats as PlayerStats
 
 
 def get_match_info(driver):
@@ -10,24 +10,24 @@ def get_match_info(driver):
                   'Venue': data[19].split(': ')[1].replace(',', '')}
     return match_info
 
-class TournamentStats:
-    @staticmethod
-    # this method using team_stats_to_csv() and player_stats_to_csv() to write a full match report to csv
-    def entire_match_report_to_csv(driver):
-        file_name = 'match_report.csv'  # open the file for writing
-        f = open(file_name, 'w', encoding='utf-8')
-        TeamStats.team_stats_to_csv(driver, file_name)  # call the method with the file path
-        PlayerStats.player_stats_to_csv(driver, file_name)  # call the method with te file path
-        f.close()  # close the file
 
-    @staticmethod
-    def entire_season(driver):
-        links_list = []
-        # Find all elements with the tag "a" and the text "Match Report"
-        elements = driver.find_elements(By.XPATH, "//a[text()='Match Report']")
-        for element in elements:
-            links_list.append(element.get_attribute("href"))  # collect all the match_report links to list
+# this method using team_stats_to_csv() and player_stats_to_csv() to write a full match report to csv
+def entire_match_report_to_csv(driver, file_path):
+    f = open(file_path, 'w', encoding='utf-8')  # open the file for writing
+    TeamStats.team_stats_to_csv(driver, file_path)  # call the method with the file path
+    PlayerStats.player_stats_to_csv(driver, file_path)  # call the method with te file path
+    f.close()  # close the file
 
-        for link in links_list:
-            driver.get(link)  # get the current match report link
-            TournamentStats.entire_match_report_to_csv(driver)  # save the match report to csv
+
+def entire_season_to_csv(driver):
+    links_list = []
+    # Find all elements with the tag "a" and the text "Match Report"
+    elements = driver.find_elements(By.XPATH, "//a[text()='Match Report']")
+    for element in elements:
+        links_list.append(element.get_attribute("href"))  # collect all the match_report links to list
+
+    i = 1
+    for link in links_list:
+        driver.get(link)  # get the current match report link
+        entire_match_report_to_csv(driver,f'match_{i}.csv')  # save the match report to csv
+        i += 1
