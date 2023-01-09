@@ -29,5 +29,5 @@ def entire_season_to_csv(driver):
     i = 1
     for link in links_list:
         driver.get(link)  # get the current match report link
-        entire_match_report_to_csv(driver,f'match_{i}.csv')  # save the match report to csv
+        entire_match_report_to_csv(driver, f'match_{i}.csv')  # save the match report to csv
         i += 1

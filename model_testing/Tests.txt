@@ -1,0 +1,2 @@
+Tests:
+1.	get prediction from the model with the original players, than switch the players to check if the predicted result changed
